@@ -83,7 +83,6 @@ def main():
             movie = movies[path[i + 1][0]]["title"]
             print(f"{i + 1}: {person1} and {person2} starred in {movie}")
 
-
 def shortest_path(source, target):
     """
     Returns the shortest list of (movie_id, person_id) pairs
@@ -93,7 +92,106 @@ def shortest_path(source, target):
     """
 
     # TODO
-    raise NotImplementedError
+    counter = 0
+    start = Node(state=source,parent=None,action=None)
+    frontier = QueueFrontier()
+    frontier.add(start)
+
+    counter = 0
+
+    explored = set()
+
+    path = set()
+
+    while True:
+        print(f"Check 3")
+        if frontier.empty:
+            print(f"Check 4")
+            raise Exception("No Solution")
+        print(f"Check 5")
+        node = frontier.remove()
+        counter += 1
+        print(f"Check 6")
+        # If the node contains the goal state,
+        if node.state == target:
+            print(f"Check 7")
+            actions = []
+            states = []
+            while node.parent is not None:
+                print(f"Check 8")
+                actions.append(node.action)
+                states.append(node.state)
+                node = node.parent
+                print(node)
+            print(f"Check 9")
+            actions.reverse()
+            states.reverse()
+            path.append([actions.reverse(),states.reverse()])
+            # Return the solution. Stop.
+            return path
+
+        print(f"Check 10")
+        # Add the current node to the explored set.
+        explored.add(node.state)
+        print(f"Check 11")
+        # Expand the node (find all the new nodes that could be reached from this node), and add resulting nodes to the frontier.)
+        for action, state in neighbors_for_person(node.state):
+            print(f"Check 12")
+            if not frontier.contains_state(state) and state not in explored:
+                print(f"Check 13")
+                child = Node(state=state,parent=node,action=action)
+                frontier.add(child)
+                print(f"Check 14")
+
+    # Track number of states explored
+    # num_explored = 0
+    # solution = []
+    # # Initialize frontier to just the starting postition
+    # start = Node(state=source, parent = None, action = None)
+    # frontier = QueueFrontier() # Bread-First Search
+    # frontier.add(start)
+
+    # # Initialize an empty explored set
+    # explored = set()
+
+    # # Keep loopping until solution found
+    # while True:
+    #     # if nothing left in frontier, then no path
+    #     if frontier.empty():
+    #         raise Exception("No solution")
+
+    #     # Choose a node from the frontier
+    #     node = frontier.remove()
+    #     num_explored += 1
+
+    #     # If node is the goal, then we have a solution
+    #     if node.state == target:
+    #         actions = []
+    #         cells = []
+
+    #         # Follow parent nodes to find solution
+    #         while node.parent is not None:
+    #             actions.append(node.action)
+    #             cells.append(node.state)
+    #             node = node.parent
+    #             print(node)
+    #         actions.reverse()
+    #         cells.reverse()
+    #         solution = (actions,cells)
+    #         print(type(solution))
+    #         return solution
+
+    #     # Mark node as explored
+    #     explored.add(node.state)
+
+    #     #Add neighbors to frontier
+    #     # Look at all the neighbors and check if the state is alread in frontier or explored set
+    #     for action, state in neighbors_for_person(node.state):
+    #         if not frontier.contains_state(state) and state not in explored:
+    #             # If not add new child node to frontier AKA pop off and move to next
+    #             child = Node(state=state, parent=node, action = action)
+    #             frontier.add(child)
+
 
 
 def person_id_for_name(name):

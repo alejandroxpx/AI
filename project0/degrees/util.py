@@ -1,11 +1,14 @@
+import sys
+
 class Node():
     def __init__(self, state, parent, action):
         self.state = state
         self.parent = parent
         self.action = action
 
-
-class StackFrontier():
+# Class generate an object in python
+class StackFrontier():#LIFO
+    # Create a frontier by creating an empty list
     def __init__(self):
         self.frontier = []
 
@@ -26,9 +29,9 @@ class StackFrontier():
             self.frontier = self.frontier[:-1]
             return node
 
-
-class QueueFrontier(StackFrontier):
-
+# Does the same thing StackFrontier did except removes differently
+class QueueFrontier(StackFrontier):#FIFO
+    
     def remove(self):
         if self.empty():
             raise Exception("empty frontier")
