@@ -90,109 +90,67 @@ def shortest_path(source, target):
 
     If no possible path, returns None.
     """
+    print("Source :" + source )
+    print("Target :" + target )    
 
     # TODO
-    counter = 0
-    start = Node(state=source,parent=None,action=None)
+    goal = target
+    print("Goal :" + goal)
+ # Keep track of number of states explored
+    num_explored = 0
+
+    # Initialize frontier to just the starting position
+    start = Node(state=source, parent=None, action=neighbors_for_person(source))
+    print("Start : " + start.state)
+    print(f"Parent : {start.parent}" )
+    print(f"Action : {start.action}" )
     frontier = QueueFrontier()
+
     frontier.add(start)
+    print(f"Frontier: {frontier}")
 
-    counter = 0
-
+    # Initialize an empty explored set
     explored = set()
-
-    path = set()
-
+    path = []
+    # Keep looping until solution found
     while True:
-        print(f"Check 3")
-        if frontier.empty:
-            print(f"Check 4")
-            raise Exception("No Solution")
-        print(f"Check 5")
+
+        # If nothing left in frontier, then no path
+        if frontier.empty():
+            raise Exception("no solution")
+
+        # Choose a node from the frontier
         node = frontier.remove()
-        counter += 1
-        print(f"Check 6")
-        # If the node contains the goal state,
-        if node.state == target:
-            print(f"Check 7")
-            actions = []
-            states = []
+        print(f"Movies: {node.action} Actors: {node.state}" )
+        num_explored += 1
+        print(f"number of explroed sets: {num_explored}")
+
+        # If node is the goal, then we have a solution
+        if node.state == goal:
+            actions = [] # Movies
+            cells = [] # actors
             while node.parent is not None:
-                print(f"Check 8")
                 actions.append(node.action)
-                states.append(node.state)
+                print(f"actions: {actions}")
+                cells.append(node.state)
+                print(f"cells: {cells}")
+                path.append((node.action,node.state))
                 node = node.parent
-                print(node)
-            print(f"Check 9")
             actions.reverse()
-            states.reverse()
-            path.append([actions.reverse(),states.reverse()])
-            # Return the solution. Stop.
+            cells.reverse()
+            solution = (actions,cells)
+            #path.append((actions.reverse(),cells.reverse()))
+            print(f"Path: {path}")
             return path
 
-        print(f"Check 10")
-        # Add the current node to the explored set.
+        # Mark node as explored
         explored.add(node.state)
-        print(f"Check 11")
-        # Expand the node (find all the new nodes that could be reached from this node), and add resulting nodes to the frontier.)
+
+        # Add neighbors to frontier
         for action, state in neighbors_for_person(node.state):
-            print(f"Check 12")
             if not frontier.contains_state(state) and state not in explored:
-                print(f"Check 13")
-                child = Node(state=state,parent=node,action=action)
+                child = Node(state=state, parent=node, action=action)
                 frontier.add(child)
-                print(f"Check 14")
-
-    # Track number of states explored
-    # num_explored = 0
-    # solution = []
-    # # Initialize frontier to just the starting postition
-    # start = Node(state=source, parent = None, action = None)
-    # frontier = QueueFrontier() # Bread-First Search
-    # frontier.add(start)
-
-    # # Initialize an empty explored set
-    # explored = set()
-
-    # # Keep loopping until solution found
-    # while True:
-    #     # if nothing left in frontier, then no path
-    #     if frontier.empty():
-    #         raise Exception("No solution")
-
-    #     # Choose a node from the frontier
-    #     node = frontier.remove()
-    #     num_explored += 1
-
-    #     # If node is the goal, then we have a solution
-    #     if node.state == target:
-    #         actions = []
-    #         cells = []
-
-    #         # Follow parent nodes to find solution
-    #         while node.parent is not None:
-    #             actions.append(node.action)
-    #             cells.append(node.state)
-    #             node = node.parent
-    #             print(node)
-    #         actions.reverse()
-    #         cells.reverse()
-    #         solution = (actions,cells)
-    #         print(type(solution))
-    #         return solution
-
-    #     # Mark node as explored
-    #     explored.add(node.state)
-
-    #     #Add neighbors to frontier
-    #     # Look at all the neighbors and check if the state is alread in frontier or explored set
-    #     for action, state in neighbors_for_person(node.state):
-    #         if not frontier.contains_state(state) and state not in explored:
-    #             # If not add new child node to frontier AKA pop off and move to next
-    #             child = Node(state=state, parent=node, action = action)
-    #             frontier.add(child)
-
-
 
 def person_id_for_name(name):
     """
@@ -235,3 +193,35 @@ def neighbors_for_person(person_id):
 
 if __name__ == "__main__":
     main()
+
+
+    # def recurse(source, target, frontier, node):
+    #     if source == target:
+    #         print("match")
+    #         return True
+    #     if frontier.empty():
+    #         return "Nothing"
+    #     explored.add(node.state)
+    #         # print(f"{explored.add(node.state)}")
+    #         # Expand the node (find all the new nodes that could be reached from this node), and add resulting nodes to the frontier.)
+    #     for action, state in neighbors_for_person(node.state):
+    #         print(f"Check 12")
+    #         if not frontier.contains_state(state) and state not in explored:
+    #             print(f"Check 13")
+    #             child = Node(state=state,parent=node,action=action)
+    #             frontier.add(child)
+    #             print(f"Check 14")
+    #     return recurse(node.state,target,frontier,node)
+
+    # start = Node(state=source,parent=None,action=None)
+    # frontier = QueueFrontier()
+    # frontier.add(start)
+    # node = start
+    # path = []
+    # explored = set()
+    # while True:
+    #     if recurse(source, target, frontier,node) == False:
+    #         print("its running")
+    #     else: 
+    #         print("it found target")
+    #         return path
